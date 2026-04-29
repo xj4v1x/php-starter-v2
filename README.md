@@ -1,35 +1,97 @@
-# PHP Starter Kit
+# PHP Starter Kit v2
 
-Starter kit PHP minimalista sin frameworks. Listo para desplegar en hosting compartido (cPanel / Apache).
+Starter kit PHP minimalista sin frameworks, diseñado como base reutilizable para aplicaciones reales en hosting compartido (cPanel / Apache).
 
-## Requisitos
+Esta versión (v2) evoluciona respecto a v1 incorporando un módulo demo funcional (Users CRUD) y mejoras en la estructura de aplicación.
+
+---
+
+# 🧠 Diferencias entre v1 y v2
+
+## 🟢 v1 — Infraestructura base
+
+- MVC básico
+- Router simple
+- Dotenv
+- PDO helper (db())
+- BaseController (view/json/redirect)
+- Views simples
+- Sin ejemplos funcionales
+- Sin módulos de aplicación
+
+👉 v1 = base técnica reutilizable
+
+---
+
+## 🟡 v2 — Base + aplicación demo
+
+Todo lo de v1 +:
+
+### 📦 Módulo demo
+- Users CRUD completo:
+  - index
+  - create
+  - store
+  - edit
+  - update
+  - delete
+
+### ⚙️ Mejora de entorno
+- Control de errores por APP_ENV
+  - local → muestra errores
+  - production → oculta errores
+
+### 🧱 Estructura preparada para crecer
+- src/Services/ (scaffold)
+- storage/logs/ (logging preparado)
+- .env.example completo
+
+### 🧹 Limpieza del sistema
+- eliminación de debug hardcodeado
+- bootstrap más estable
+- flujo de arranque ordenado
+
+---
+
+# 🧠 Filosofía del proyecto
+
+Este proyecto NO es un framework.
+
+Es un starter kit evolutivo:
+
+- v1 → base técnica mínima
+- v2 → base + ejemplo funcional real
+- v3 → (futuro) capa de aplicación avanzada
+
+---
+
+# ⚙️ Requisitos
 
 - PHP 8.1+
 - Composer
-- Apache con `mod_rewrite` habilitado
+- Apache con mod_rewrite habilitado
 - MySQL / MariaDB
 
-## Instalación
+---
+
+# 🚀 Instalación
 
 ```bash
-git clone https://github.com/tuusuario/php-starter-kit.git
-cd php-starter-kit
+git clone https://github.com/tuusuario/php-starter-kit-v2.git
+cd php-starter-kit-v2
 composer install
-```
 
-Copia el archivo de entorno y configúralo:
-
-```bash
 cp .env.example .env
 ```
 
-## Configuración `.env`
+---
+
+# 🔐 Configuración .env
 
 ```env
 APP_NAME=MyApp
 APP_ENV=local
-APP_BASE_PATH=        # vacío si el app está en la raíz del dominio
-                      # ej: /php-starter/public si está en un subdirectorio
+APP_BASE_PATH=
 
 DB_HOST=localhost
 DB_NAME=starter_app
@@ -37,9 +99,9 @@ DB_USER=root
 DB_PASS=
 ```
 
-`APP_BASE_PATH` controla el prefijo de todas las URLs generadas con `url()`. Déjalo vacío en producción si el document root apunta directamente a `/public`.
+---
 
-## Base de datos
+# 🗄️ Base de datos
 
 ```sql
 CREATE DATABASE starter_app;
@@ -47,92 +109,16 @@ CREATE DATABASE starter_app;
 USE starter_app;
 
 CREATE TABLE users (
-    id    INT AUTO_INCREMENT PRIMARY KEY,
-    name  VARCHAR(100) NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL
 );
 ```
 
-## Estructura
+---
 
-```
-project/
-├── config/
-│   ├── config.php      # helper url()
-│   └── database.php    # helper db() — conexión PDO singleton
-├── public/
-│   ├── .htaccess       # rewrite all → index.php
-│   └── index.php       # entry point: carga env, router, despacha controller
-├── routes/
-│   └── web.php         # definición de rutas (path + method + action)
-├── src/
-│   ├── Controllers/
-│   │   ├── HomeController.php
-│   │   └── UserController.php
-│   ├── Core/
-│   │   └── BaseController.php  # view(), json(), redirect()
-│   ├── Models/
-│   │   └── User.php
-│   └── Services/
-├── views/
-│   ├── home.php
-│   └── users/
-│       ├── index.php
-│       ├── create.php
-│       └── edit.php
-├── .env
-└── composer.json
-```
+# 🧠 Notas importantes
 
-## Routing
-
-Las rutas se definen en `routes/web.php`. Cada ruta requiere `path`, `method` y `action`:
-
-```php
-return [
-    ['path' => '/',             'method' => 'GET',  'action' => 'HomeController@index'],
-    ['path' => '/users',        'method' => 'GET',  'action' => 'UserController@index'],
-    ['path' => '/users/store',  'method' => 'POST', 'action' => 'UserController@store'],
-];
-```
-
-## Controllers
-
-Extienden `BaseController` y tienen acceso a tres métodos:
-
-```php
-$this->view('users/index', ['users' => $users]); // renderiza views/users/index.php
-$this->json(['ok' => true]);                      // respuesta JSON
-$this->redirect(url('/users'));                   // redirect con basePath
-```
-
-## Helper `url()`
-
-Genera URLs respetando el `APP_BASE_PATH` configurado en `.env`:
-
-```php
-url('/users')        // → /php-starter/public/users  (local)
-url('/users')        // → /users                     (producción en raíz)
-```
-
-Úsalo en vistas y controllers para todos los `href`, `action` y redirects.
-
-## Modelos
-
-Los modelos usan el helper `db()` que devuelve una instancia PDO singleton. Todos los queries usan prepared statements:
-
-```php
-User::all();
-User::find($id);
-User::create(['name' => 'Ana', 'email' => 'ana@mail.com']);
-User::update($id, ['name' => 'Ana', 'email' => 'ana@mail.com']);
-User::delete($id);
-```
-
-## Despliegue en hosting compartido
-
-1. Sube todos los archivos excepto `.env`
-2. Crea el `.env` directamente en el servidor
-3. Apunta el document root a la carpeta `/public`
-4. Si el app vive en un subdirectorio, configura `APP_BASE_PATH` con ese prefijo
-5. Verifica que `mod_rewrite` esté activo en Apache
+- v2 incluye un módulo demo (Users CRUD)
+- No es un framework completo
+- Está diseñado para ser extendido manualmente
