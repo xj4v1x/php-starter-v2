@@ -2,41 +2,61 @@
 
 namespace App\Controllers;
 
+use App\Core\BaseController;
 use App\Models\User;
 
-class UserController {
-
-    public function index() {
+class UserController extends BaseController
+{
+    public function index()
+    {
         $users = User::all();
-
-        require __DIR__ . '/../../views/users/index.php';
+        $this->view('users/index', ['users' => $users]);
     }
 
-    public function create() {
-        require __DIR__ . '/../../views/users/create.php';
+    public function create()
+    {
+        $this->view('users/create');
     }
 
-    public function store() {
-        User::create($_POST);
+    public function store()
+    {
+        $name  = trim($_POST['name']  ?? '');
+        $email = trim($_POST['email'] ?? '');
 
-        header("Location: /users");
+        if ($name !== '' && $email !== '') {
+            User::create(['name' => $name, 'email' => $email]);
+        }
+
+        $this->redirect(url('/users'));
     }
 
-    public function edit() {
-        $user = User::find($_GET['id']);
-
-        require __DIR__ . '/../../views/users/edit.php';
+    public function edit()
+    {
+        $user = User::find((int) ($_GET['id'] ?? 0));
+        $this->view('users/edit', ['user' => $user]);
     }
 
-    public function update() {
-        User::update($_POST['id'], $_POST);
+    public function update()
+    {
+        $id    = (int) ($_POST['id']    ?? 0);
+        $name  = trim($_POST['name']    ?? '');
+        $email = trim($_POST['email']   ?? '');
 
-        header("Location: /users");
+        if ($id > 0 && $name !== '' && $email !== '') {
+            User::update($id, ['name' => $name, 'email' => $email]);
+        }
+
+        $this->redirect(url('/users'));
     }
 
-    public function delete() {
-        User::delete($_GET['id']);
+    public function delete()
+    {
+        $id = (int) ($_GET['id'] ?? 0);
 
-        header("Location: /users");
+        if ($id > 0) {
+            User::delete($id);
+        }
+
+        $this->redirect(url('/users'));
     }
 }

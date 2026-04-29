@@ -1,8 +1,13 @@
+<?php
+
 namespace App\Controllers;
 
-class HomeController extends BaseController {
+use App\Core\BaseController;
 
-    public function index() {
+class HomeController extends BaseController
+{
+    public function index()
+    {
         return $this->view('home');
     }
 }
