@@ -20,7 +20,7 @@ Esta versión (v2) evoluciona respecto a v1 incorporando un módulo demo funcion
 - Sin módulos de aplicación
 
 👉 v1 = base técnica reutilizable
-
+[https://github.com/xj4v1x/php-starter](https://github.com/xj4v1x/php-starter)
 ---
 
 ## 🟡 v2 — Base + aplicación demo
