@@ -78,7 +78,7 @@ Es un starter kit evolutivo:
 # 🚀 Instalación
 
 ```bash
-git clone https://github.com/tuusuario/php-starter-kit-v2.git
+git clone https://github.com/xj4v1x/php-starter-v2.git
 cd php-starter-kit-v2
 composer install
 
