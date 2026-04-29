@@ -20,7 +20,8 @@ Esta versión (v2) evoluciona respecto a v1 incorporando un módulo demo funcion
 - Sin módulos de aplicación
 
 👉 v1 = base técnica reutilizable
-[https://github.com/xj4v1x/php-starter](https://github.com/xj4v1x/php-starter)
+https://github.com/xj4v1x/php-starter
+
 ---
 
 ## 🟡 v2 — Base + aplicación demo
@@ -94,7 +95,7 @@ APP_ENV=local
 APP_BASE_PATH=
 
 DB_HOST=localhost
-DB_NAME=starter_app
+DB_NAME=starter_app_v2
 DB_USER=root
 DB_PASS=
 ```
@@ -104,9 +105,9 @@ DB_PASS=
 # 🗄️ Base de datos
 
 ```sql
-CREATE DATABASE starter_app;
+CREATE DATABASE starter_app_v2;
 
-USE starter_app;
+USE starter_app_v2;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
